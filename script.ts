@@ -30,11 +30,11 @@ async function main() {
     console.log(deletedUsers)
   })
       
-  const newuser = await prisma.user.create({
+  const newUser = await prisma.user.create({
     data: {
       name: 'Andre',
-        email: 'andre@teste.prisma.io',
-        authors: {
+      email: 'andre@teste.prisma.io',
+        author: {
           create: {
             tags: '',
             surname: 'Pires',
@@ -48,14 +48,14 @@ async function main() {
         //   ],
         // },
         // comments: {
-        //   create: [
-        //     {text: ''},
-        //   ],
+        //   connect: {
+        //     text: '',
+        //   },
         // },     
     },
   })
 
-  console.log(newuser)
+ console.log(newUser)
 
       
 }
