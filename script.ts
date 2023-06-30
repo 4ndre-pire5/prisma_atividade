@@ -53,6 +53,29 @@ async function main() {
  
    console.log(user)
 
+    const allUsers = await prisma.user.findMany({
+      include :{
+        authors: true,
+        comments: true,
+      },
+    })
+    console.dir(allUsers, {depth: null})
+
+
+    // Delete Author and User
+/*    const deleteAuthor = prisma.author.deleteMany({
+      where: {
+        userId : 1,
+      },
+    })
+    const deleteUser = prisma.user.delete({
+      where: {
+        id: 1,
+      },
+    }) 
+
+    const transaction = await prisma.$transaction([deleteAuthor, deleteUser])*/
+      
 }
 
 main()
