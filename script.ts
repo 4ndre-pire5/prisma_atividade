@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+  log: ['query', 'info', 'warn', 'error']
+})
 
 async function main() {
 
@@ -8,73 +10,53 @@ async function main() {
   console.log(allAuthor)
 
   allAuthor.forEach(async (p) => {
-      const deletedPosts = await prisma.author.delete({
-        where: {
-          id: p.id,
-        }
-      })
+    let deletedAuthors = await prisma.author.delete({
+      where: {
+        id: p.id,
+      }
     })
+    console.log(deletedAuthors)
+  })
 
-    let allUser = await prisma.user.findMany()
-    console.log(allUser)
+  let allUser = await prisma.user.findMany()
+  console.log(allUser)
 
   allUser.forEach(async (p) => {
-      const deletedPosts = await prisma.user.delete({
-        where: {
-          id: p.id,
-        }
-      })
+    const deletedUsers = await prisma.user.delete({
+      where: {
+        id: p.id,
+      }
     })
-    
-    const user = await prisma.user.create({
-        data: {
-          name: 'Andre',
-          email: 'andre@teste.prisma.io',
-          authors: {
-            create: {
-              tags: '',
-              surname: 'Pires',
-              completeName: 'de Figueiredo',
-            },
+    console.log(deletedUsers)
+  })
+      
+  const newuser = await prisma.user.create({
+    data: {
+      name: 'Andre',
+        email: 'andre@teste.prisma.io',
+        authors: {
+          create: {
+            tags: '',
+            surname: 'Pires',
+            completeName: 'de Figueiredo',
           },
-            posts: {
-              create: [
-                {title: 'Teste'},
-                {text: 'Exercicio Prisma'},
-              ],
-            },
-          comments: {
-            create: [
-              {text: ''},
-            ],
-          },     
         },
-    })
- 
-   console.log(user)
+        // posts: {
+        //   create: [
+        //     {title: 'Teste'},
+        //     {text: 'Exercicio Prisma'},
+        //   ],
+        // },
+        // comments: {
+        //   create: [
+        //     {text: ''},
+        //   ],
+        // },     
+    },
+  })
 
-    const allUsers = await prisma.user.findMany({
-      include :{
-        authors: true,
-        comments: true,
-      },
-    })
-    console.dir(allUsers, {depth: null})
+  console.log(newuser)
 
-
-    // Delete Author and User
-/*    const deleteAuthor = prisma.author.deleteMany({
-      where: {
-        userId : 1,
-      },
-    })
-    const deleteUser = prisma.user.delete({
-      where: {
-        id: 1,
-      },
-    }) 
-
-    const transaction = await prisma.$transaction([deleteAuthor, deleteUser])*/
       
 }
 
